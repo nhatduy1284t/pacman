@@ -13,6 +13,7 @@ class SearchProblem:
         """
         Returns the start state for the search problem.
         """
+
         util.raiseNotDefined()
 
     def isGoalState(self, state):
@@ -47,10 +48,12 @@ class SearchProblem:
 class SingleFoodSearchProblem(SearchProblem):
     def __init__(self, startingGameState):
         # TODO 1
+        
         pass
 
     def getStartState(self):
-        # TODO 1
+        # TODO 2
+        
         pass
 
     def isGoalState(self, state):
