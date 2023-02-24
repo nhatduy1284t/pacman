@@ -48,31 +48,32 @@ class SearchProblem:
 class SingleFoodSearchProblem(SearchProblem):
     def __init__(self, startingGameState):
         # TODO 1
-        self.initialState = startingGameState
-        self.state = startingGameState
-        pass
+        self.init_state = startingGameState
 
     def getStartState(self):
         # TODO 2
-        return self.initialState
-        pass
+        return self.init_state
 
     def isGoalState(self, state):
         # TODO 3
-        if(state.getNumFood() == 0):
-            return True
-        return False
-        pass
+        return state.getNumFood() == 0
 
     def getSuccessors(self, state):
         # TODO 4
+
+        #  Pacman
+        actions = state.getLegalPacmanActions()
         successors = []
-        state.generateSuccessor(0)
-        pass
+
+        for action in actions:
+            successor = state.generatePacmanSuccessor(action)
+            successors.append((successor, action, 1))
+
+        return successors
 
     def getCostOfActions(self, actions):
         # TODO 5
-        pass
+        return len(actions)
 
 
 class MultiFoodSearchProblem(SearchProblem):

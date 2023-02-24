@@ -15,6 +15,7 @@ def depthFirstSearch(problem):
     '''
     return a path to the goal
     '''
+    
     # TODO 17
 
 
@@ -22,6 +23,7 @@ def breadthFirstSearch(problem):
     '''
     return a path to the goal
     '''
+
     # TODO 18
 
 

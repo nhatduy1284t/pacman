@@ -94,7 +94,6 @@ class GameState:
 
         # Copy current state
         state = GameState(self)
-        print(agentIndex,'action',action)
         # Let agent's logic deal with its action's effects on the board
         if agentIndex == 0:  # Pacman is moving
             state.data._eaten = [False for i in range(state.getNumAgents())]
@@ -120,6 +119,7 @@ class GameState:
         return state
 
     def getLegalPacmanActions(self):
+        
         return self.getLegalActions(0)
 
     def generatePacmanSuccessor(self, action):
@@ -170,6 +170,7 @@ class GameState:
         return self.data.capsules
 
     def getNumFood(self):
+        # print(self.data.food.count() == 0)
         return self.data.food.count()
 
     def getFood(self):
