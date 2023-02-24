@@ -17,6 +17,21 @@ def depthFirstSearch(problem):
     '''
     
     # TODO 17
+    visited = set()  # Set to keep track of visited states
+    stack = [(problem.getStartState(), [])]  # Stack to keep track of states to visit
+    print(stack)
+    while stack:
+        pass
+        state, path = stack.pop()  # Get the next state to visit from the stack
+        if problem.isGoalState(state):  # Check if the goal state has been reached
+            return path  # Return the path to the goal
+        # if state not in visited:  # Check if the state has already been visited
+        #     visited.add(state)  # Mark the state as visited
+        #     for next_state, action, cost in problem.getSuccessors(state):  # Get the possible next states
+        #         next_path = path + [action]  # Update the path to the next state
+        #         stack.append((next_state, next_path))  # Add the next state and path to the stack
+
+    return None  # Return None if no path to the goal is found
 
 
 def breadthFirstSearch(problem):

@@ -1,5 +1,6 @@
 import random
 from problems import *
+from search import *
 
 from game import Agent
 from game import Directions
@@ -21,9 +22,11 @@ class RandomAgent(Agent):
 
 class DuyAgent(Agent):
     def getAction(self, state):
+        problem = SingleFoodSearchProblem(state)
+        path= depthFirstSearch(problem)
+        # print(path)
         actions = state.getLegalPacmanActions()
-        # random.shuffle(actions)
-        print(state.getFood()[0])
+        random.shuffle(actions)
         return actions[0]
 
 class SearchAgent(Agent):
@@ -61,9 +64,18 @@ class BFSFoodSearchAgent(SearchAgent):
 
 
 
+
 class DFSFoodSearchAgent(SearchAgent):
     # TODO 14
     pass
+    def registerInitialState(self, state):
+        # problem = SingleFoodSearchProblem(state)
+        #  breadthFirstSearch(problem)
+        pass
+        
+    def getAction(self, state):
+        
+        pass
 
 
 
