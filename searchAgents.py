@@ -1,4 +1,5 @@
 import random
+from problems import *
 
 from game import Agent
 from game import Directions
@@ -30,7 +31,9 @@ class SearchAgent(Agent):
         state: a GameState object (pacman.py)
         """
         # TODO 11
-
+        problem = SingleFoodSearchProblem(state)
+        
+        
     def getAction(self, state):
         """
         Returns the next action in the path chosen earlier (in
@@ -40,6 +43,8 @@ class SearchAgent(Agent):
         state: a GameState object (pacman.py)
         """
         # TODO 12
+
+
 
 
 class BFSFoodSearchAgent(SearchAgent):

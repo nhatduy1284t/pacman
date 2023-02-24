@@ -168,6 +168,7 @@ class GameState:
         return self.data.capsules
 
     def getNumFood(self):
+        # print(self.data.food.count() == 0)
         return self.data.food.count()
 
     def getFood(self):
