@@ -1,6 +1,7 @@
 import inspect
 import random
 import sys
+import copy
 
 import signa as signa
 
@@ -108,17 +109,73 @@ class FixedRandom:
 
 class Stack:
     # TODO 23
-    pass
+    # constructor
+    def __init__(self):
+        self.stack = []
+        
+    # print() or str()
+    def __str__(self):
+        return str(self.stack)
+    
+    # len()
+    def __len__(self):
+        return len(self.stack)
+    
+    def push(self, value):
+        self.stack.append(value)
+        
+    def pop(self):
+        return self.stack.pop()
 
 
 class Queue:
     # TODO 24
-    pass
+    # constructor
+    def __init__(self):
+        self.queue = []
+    
+    # print() or str()
+    def __str__(self):
+        return str(self.queue)
+    
+    # len()
+    def __len__(self):
+        return len(self.queue)
+    
+    def enqueue(self, value):
+        self.queue.append(value)
+        
+    def dequeue(self):
+        return self.queue.pop(0)
 
 
 class PriorityQueue:
     # TODO 25
-    pass
+    def __init__(self):
+        self.priority_queue = []
+    
+    def __len__(self):
+        return len(self.priority_queue)
+    
+    def __str__(self):
+        return "".join(str(i[1]) for i in self.priority_queue)
+    
+    def push(self, value, priority):
+        pair = (priority, value)
+        inserted = False
+        
+        for i, (p, _) in enumerate(self.priority_queue):
+            if priority < p:
+                self.priority_queue.insert(i, pair)
+                inserted = True
+                break
+        if not inserted:
+            self.priority_queue.append(pair)
+            
+    def pop(self):
+        return self.priority_queue.pop(0)[1]
+        
+    
 
 
 class PriorityQueueWithFunction(PriorityQueue):
