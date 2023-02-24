@@ -78,8 +78,8 @@ class GameState:
         Returns the legal actions for the agent specified.
         """
         #        GameState.explored.add(self)
-        if self.isWin() or self.isLose(): return []
 
+        if self.isWin() or self.isLose(): return []
         if agentIndex == 0:  # Pacman is moving
             return PacmanRules.getLegalActions(self)
         else:
@@ -94,7 +94,7 @@ class GameState:
 
         # Copy current state
         state = GameState(self)
-
+        print(agentIndex,'action',action)
         # Let agent's logic deal with its action's effects on the board
         if agentIndex == 0:  # Pacman is moving
             state.data._eaten = [False for i in range(state.getNumAgents())]
@@ -116,6 +116,7 @@ class GameState:
         state.data.score += state.data.scoreChange
         GameState.explored.add(self)
         GameState.explored.add(state)
+
         return state
 
     def getLegalPacmanActions(self):
@@ -156,6 +157,7 @@ class GameState:
         return [s.getPosition() for s in self.getGhostStates()]
 
     def getNumAgents(self):
+
         return len(self.data.agentStates)
 
     def getScore(self):
@@ -180,6 +182,7 @@ class GameState:
         currentFood = state.getFood()
         if currentFood[x][y] == True: ...
         """
+
         return self.data.food
 
     def getWalls(self):
@@ -217,6 +220,7 @@ class GameState:
         """
         if prevState != None:  # Initial state
             self.data = GameStateData(prevState.data)
+            # print(self.getFood())
         else:
             self.data = GameStateData()
 
@@ -294,6 +298,7 @@ class ClassicGameRules:
         game.gameOver = True
 
     def getProgress(self, game):
+
         return float(game.state.getNumFood()) / self.initialState.getNumFood()
 
     def agentCrash(self, game, agentIndex):
@@ -697,6 +702,7 @@ if __name__ == '__main__':
     > python pacman.py --help
     """
     args = readCommand(sys.argv[1:])  # Get game components based on input
+
     runGames(**args)
 
     # import cProfile

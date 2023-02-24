@@ -48,20 +48,26 @@ class SearchProblem:
 class SingleFoodSearchProblem(SearchProblem):
     def __init__(self, startingGameState):
         # TODO 1
-        
+        self.initialState = startingGameState
+        self.state = startingGameState
         pass
 
     def getStartState(self):
         # TODO 2
-        
+        return self.initialState
         pass
 
     def isGoalState(self, state):
         # TODO 3
+        if(state.getNumFood() == 0):
+            return True
+        return False
         pass
 
     def getSuccessors(self, state):
         # TODO 4
+        successors = []
+        state.generateSuccessor(0)
         pass
 
     def getCostOfActions(self, actions):

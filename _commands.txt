@@ -1,2 +1,5 @@
 python pacman.py
 python pacman.py -l <layout_file> -p <search agent> -z <zoom level>
+
+python pacman.py -l bigMaze.py -p <search agent> -z <zoom level>
+python pacman.py -p RandomAgent

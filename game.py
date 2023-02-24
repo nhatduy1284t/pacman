@@ -373,6 +373,7 @@ class GameStateData:
         """
         if prevState != None:
             self.food = prevState.food.shallowCopy()
+
             self.capsules = prevState.capsules[:]
             self.agentStates = self.copyAgentStates(prevState.agentStates)
             self.layout = prevState.layout
@@ -437,6 +438,7 @@ class GameStateData:
             for y in range(height):
                 food, walls = self.food, self.layout.walls
                 map[x][y] = self._foodWallStr(food[x][y], walls[x][y])
+
 
         for agentState in self.agentStates:
             if agentState == None: continue
