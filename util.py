@@ -121,6 +121,10 @@ class Stack:
     def __len__(self):
         return len(self.stack)
     
+    # in and not in
+    def __contains__(self, value):
+        return value in self.stack
+    
     def push(self, value):
         self.stack.append(value)
         
@@ -142,6 +146,9 @@ class Queue:
     def __len__(self):
         return len(self.queue)
     
+    def __contains__(self, value):
+        return value in self.queue
+    
     def enqueue(self, value):
         self.queue.append(value)
         
@@ -159,6 +166,12 @@ class PriorityQueue:
     
     def __str__(self):
         return "".join(str(i[1]) for i in self.priority_queue)
+    
+    def __contains__(self, value):
+       for item in self.priority_queue:
+           if (item[1] == value):
+               return True
+       return False
     
     def push(self, value, priority):
         pair = (priority, value)
