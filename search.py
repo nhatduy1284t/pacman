@@ -5,6 +5,7 @@ Pacman agents (in searchAgents.py).
 from util import *
 from game import Directions
 import time
+
 n = Directions.NORTH
 s = Directions.SOUTH
 e = Directions.EAST
@@ -38,13 +39,38 @@ def depthFirstSearch(problem):
 
     return None
 
-
 def breadthFirstSearch(problem):
     '''
     return a path to the goal
     '''
-
     # TODO 18
+    current_state = problem.getStartState()
+    
+    if problem.isGoalState(current_state):
+        # return [current_state]
+        return []
+    
+    frontier = Queue()
+    explored = set()
+    
+    # each item in the frontier is a tuple of (state, path to state)
+    # frontier.push((current_state, [current_state]))
+    frontier.enqueue((current_state, []))
+    
+    while (frontier):
+        state, path = frontier.dequeue()
+        explored.add(state)
+        successors = problem.getSuccessors(state)
+
+        for successor, action, cost in successors:
+            if successor not in explored and successor not in (s for s,_ in frontier.queue):
+                if problem.isGoalState(successor):
+                    # return path + [successor]
+                    return path + [action]
+                # frontier.push((successor, path + [successor]))
+                frontier.enqueue((successor, path + [action]))
+                
+    return None
 
 
 def uniformCostSearch(problem):
