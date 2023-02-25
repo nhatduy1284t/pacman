@@ -2,9 +2,9 @@
 In search.py, you will implement generic search algorithms which are called by
 Pacman agents (in searchAgents.py).
 """
-
+from util import *
 from game import Directions
-
+import time
 n = Directions.NORTH
 s = Directions.SOUTH
 e = Directions.EAST
@@ -15,23 +15,28 @@ def depthFirstSearch(problem):
     '''
     return a path to the goal
     '''
-    
     # TODO 17
-    visited = set()  # Set to keep track of visited states
-    stack = [(problem.getStartState(), [])]  # Stack to keep track of states to visit
-    print(stack)
-    while stack:
-        pass
-        state, path = stack.pop()  # Get the next state to visit from the stack
-        if problem.isGoalState(state):  # Check if the goal state has been reached
-            return path  # Return the path to the goal
-        # if state not in visited:  # Check if the state has already been visited
-        #     visited.add(state)  # Mark the state as visited
-        #     for next_state, action, cost in problem.getSuccessors(state):  # Get the possible next states
-        #         next_path = path + [action]  # Update the path to the next state
-        #         stack.append((next_state, next_path))  # Add the next state and path to the stack
+    stack = Stack()
+    node = problem.getStartState()
+    visited = [node]
+    stack.push(node)
+    while(stack):
+        node = stack.pop()
+        neighbors = problem.getSuccessors(node)
+        for tuple in neighbors:
+            i=0
+            n,action, cost = tuple
+            print(n)
+            if(n not in visited):
+                print("Go",action)
+                visited.append(n)
+                stack.push(n)
+                break   
 
-    return None  # Return None if no path to the goal is found
+
+    print("da ra khoi while")       
+
+    return None
 
 
 def breadthFirstSearch(problem):

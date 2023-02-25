@@ -24,10 +24,16 @@ class DuyAgent(Agent):
     def getAction(self, state):
         problem = SingleFoodSearchProblem(state)
         path= depthFirstSearch(problem)
-        # print(path)
-        actions = state.getLegalPacmanActions()
-        random.shuffle(actions)
-        return actions[0]
+        legal = state.getLegalPacmanActions()
+        current = state.getPacmanState().configuration.direction
+        if current == Directions.STOP: current = Directions.NORTH
+        left = Directions.LEFT[current]
+        print(left)
+        if left in legal: return left
+        if current in legal: return current
+        if Directions.RIGHT[current] in legal: return Directions.RIGHT[current]
+        if Directions.LEFT[left] in legal: return Directions.LEFT[left]
+        return Directions.STOP
 
 class SearchAgent(Agent):
     def registerInitialState(self, state):

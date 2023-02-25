@@ -62,7 +62,7 @@ class SingleFoodSearchProblem(SearchProblem):
         # TODO 4
 
         #  Pacman
-        actions = state.getLegalPacmanActions()
+        actions = state.deepCopy().getLegalPacmanActions()
         successors = []
 
         for action in actions:
