@@ -11,33 +11,56 @@ s = Directions.SOUTH
 e = Directions.EAST
 w = Directions.WEST
 
+# def depthFirstSearch(problem, state, path):
+#     path += [state]
+
+#     successors = problem.getSuccessors(state)
+#     for successor, action, cost in successors:
+#         if (successor.getPacmanPosition() not in (state.getPacmanPosition() for state in path)):
+#             path = depthFirstSearch(problem, successor, path)
+        
+#     return path
+    
 
 def depthFirstSearch(problem):
     '''
     return a path to the goal
     '''
-    # TODO 17
-    stack = Stack()
-    node = problem.getStartState()
-    visited = [node]
-    stack.push(node)
-    while(stack):
-        node = stack.pop()
-        neighbors = problem.getSuccessors(node)
-        for tuple in neighbors:
-            i=0
-            n,action, cost = tuple
-            print(n)
-            if(n not in visited):
-                print("Go",action)
-                visited.append(n)
-                stack.push(n)
-                break   
-
-
-    print("da ra khoi while")       
-
+    current_state = problem.getStartState()
+    
+    if problem.isGoalState(current_state):
+        return []
+    
+    frontier = Stack()
+    explored = set()
+    final_path = None
+    
+    # each item in the frontier is a tuple of (state, path to state)
+    frontier.push((current_state, []))
+    while(frontier):
+        state, path = frontier.pop()
+        # print(state)
+        
+        if (problem.isGoalState(state)):
+            # return path
+            final_path = path
+            break
+        
+        # if state in explored:
+        #     continue
+        if state.getPacmanPosition() not in (s.getPacmanPosition() for s in explored):     
+            explored.add(state)
+        
+        successors = problem.getSuccessors(state)
+        for successor, action, cost in reversed(successors):
+            if (successor not in explored):
+                frontier.push((successor, path + [action]))
+    
+    if (final_path is not None):
+        return final_path
     return None
+    
+    
 
 def breadthFirstSearch(problem):
     '''
@@ -56,14 +79,13 @@ def breadthFirstSearch(problem):
     # each item in the frontier is a tuple of (state, path to state)
     # frontier.push((current_state, [current_state]))
     frontier.enqueue((current_state, []))
-    
     while (frontier):
         state, path = frontier.dequeue()
         explored.add(state)
         successors = problem.getSuccessors(state)
 
         for successor, action, cost in successors:
-            if successor not in explored and successor not in (s for s,_ in frontier.queue):
+            if (successor not in explored) and (successor not in (s for s,_ in frontier.queue)):
                 if problem.isGoalState(successor):
                     # return path + [successor]
                     return path + [action]
@@ -78,6 +100,43 @@ def uniformCostSearch(problem):
     return a path to the goal
     '''
     # TODO 19
+    current_state = problem.getStartState()
+    frontier = PriorityQueue()
+    frontier.push(0, (current_state, [])) # Push the state, the path and the priority value into the frontier
+    explored = set()
+    
+    while (frontier):
+        state, path = frontier.pop()
+        
+        if (problem.isGoalState(state)):
+            return path
+        explored.add(state)
+        
+        successors = problem.getSuccessors(state)
+        for successor, action, cost in successors:
+            if (successor not in explored) and (successor not in (s[0] for _,s in frontier.priority_queue)):
+                current_path = path + [action]
+                current_path_cost = problem.getCostOfActions(current_path)
+                pair = (successor, current_path)
+                frontier.push(current_path_cost, pair)
+            else:
+                if (successor in (s[0] for _,s in frontier.priority_queue)):
+                    for item in frontier.priority_queue:
+                        if (successor == item[0]):
+                            current_path = path + [action]
+                            current_path_cost = problem.getCostOfActions(current_path)
+                            old_path = item[1]
+                            old_path_cost = problem.getCostOfActions(old_path)
+                            if (current_path_cost < old_path_cost):
+                                # Remove the old state
+                                index = frontier.getIndex(item)
+                                frontier.removeIndex(index)
+                                
+                                # Push new state
+                                pair = (successor, current_path)
+                                frontier.push(current_path_cost, pair)
+    return None
+                        
 
 
 def nullHeuristic(state, problem=None):

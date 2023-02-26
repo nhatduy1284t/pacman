@@ -23,7 +23,7 @@ class RandomAgent(Agent):
 class DuyAgent(Agent):
     def getAction(self, state):
         problem = SingleFoodSearchProblem(state)
-        path= breadthFirstSearch(problem)
+        path = uniformCostSearch(problem)
         print(path)
         return path[0]
 
@@ -39,7 +39,7 @@ class SearchAgent(Agent):
         """
         
         # TODO 11
-        problem = SingleFoodSearchProblem(state)
+        # problem = SingleFoodSearchProblem(state)
         
         
     def getAction(self, state):
@@ -57,7 +57,15 @@ class SearchAgent(Agent):
 
 class BFSFoodSearchAgent(SearchAgent):
     # TODO 13
-    pass
+    def registerInitialState(self, state):
+        problem = SingleFoodSearchProblem(state)
+        self.path = breadthFirstSearch(problem)
+          
+        
+    def getAction(self, state):
+        action = self.path[0]
+        self.path= self.path[1:]
+        return action
 
 
 
@@ -65,21 +73,29 @@ class BFSFoodSearchAgent(SearchAgent):
 
 class DFSFoodSearchAgent(SearchAgent):
     # TODO 14
-    pass
     def registerInitialState(self, state):
-        # problem = SingleFoodSearchProblem(state)
-        #  breadthFirstSearch(problem)
-        pass
+        problem = SingleFoodSearchProblem(state)
+        self.path = depthFirstSearch(problem, problem.getStartState(), [])
+          
         
     def getAction(self, state):
-        
-        pass
+        action = self.path[0]
+        self.path= self.path[1:]
+        return action
 
 
 
 class UCSFoodSearchAgent(SearchAgent):
     # TODO 15
-    pass
+    def registerInitialState(self, state):
+        problem = SingleFoodSearchProblem(state)
+        self.path = uniformCostSearch(problem)
+          
+        
+    def getAction(self, state):
+        action = self.path[0]
+        self.path= self.path[1:]
+        return action
 
 
 class AStarFoodSearchAgent(SearchAgent):
