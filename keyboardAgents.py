@@ -46,35 +46,7 @@ class KeyboardAgent(Agent):
 
         self.lastMove = move
         # We will debug our code here!!!!!!!!!!!!!!!!!
-        from problems import SingleFoodSearchProblem
-        visited = []
-        problem = SingleFoodSearchProblem(state)
-        start_state = problem.getStartState()
 
-        successors = problem.getSuccessors(start_state)
-
-        a = successors[0][0]
-        m = a.getPacmanPosition()
-
-        ss= problem.getSuccessors(a)
-        b= ss[2][0]
-        n= ss[2][0].getPacmanPosition()
-        print(b == start_state)
-        print(start_state.getPacmanPosition() == n)
-
-        # successors = problem.getSuccessors(a)
-        # b = successors[0][0]
-        # visited.append(b)
-        # print(successors)
-
-        # successors = problem.getSuccessors(b)
-        # c = successors[0][0]
-        # print(successors)
-
-        # if(c not in visited):
-            # print("yes")
-            # visited.append(c)
-        print("debug")
         return move
 
     def getMove(self, legal):

@@ -173,11 +173,11 @@ class PriorityQueue:
                return True
        return False
     
-    def push(self, value, priority):
+    def push(self, priority, value):
         pair = (priority, value)
         inserted = False
         
-        for i, (p, _) in enumerate(self.priority_queue):
+        for i, (p, v) in enumerate(self.priority_queue):
             if priority < p:
                 self.priority_queue.insert(i, pair)
                 inserted = True
@@ -187,6 +187,12 @@ class PriorityQueue:
             
     def pop(self):
         return self.priority_queue.pop(0)[1]
+    
+    def removeIndex(self, index):
+        self.priority_queue.pop(index)
+        
+    def getIndex(self, value):
+        return self.priority_queue.index(value)
         
     
 
