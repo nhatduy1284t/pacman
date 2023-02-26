@@ -23,7 +23,7 @@ class RandomAgent(Agent):
 class DuyAgent(Agent):
     def getAction(self, state):
         problem = SingleFoodSearchProblem(state)
-        path = uniformCostSearch(problem)
+        path = depthFirstSearch(problem)
         print(path)
         return path[0]
 
@@ -75,7 +75,7 @@ class DFSFoodSearchAgent(SearchAgent):
     # TODO 14
     def registerInitialState(self, state):
         problem = SingleFoodSearchProblem(state)
-        self.path = depthFirstSearch(problem, problem.getStartState(), [])
+        self.path = depthFirstSearch(problem)
           
         
     def getAction(self, state):

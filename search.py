@@ -41,19 +41,21 @@ def depthFirstSearch(problem):
         state, path = frontier.pop()
         # print(state)
         
+        # if state in explored:
+        #     continue
+        if state.getPacmanPosition() in (s.getPacmanPosition() for s in explored):     
+            # explored.add(state)
+            continue
+        explored.add(state)
+        
         if (problem.isGoalState(state)):
             # return path
             final_path = path
             break
         
-        # if state in explored:
-        #     continue
-        if state.getPacmanPosition() not in (s.getPacmanPosition() for s in explored):     
-            explored.add(state)
-        
         successors = problem.getSuccessors(state)
         for successor, action, cost in reversed(successors):
-            if (successor not in explored):
+            if (successor.getPacmanPosition() not in (s.getPacmanPosition() for s in explored)):
                 frontier.push((successor, path + [action]))
     
     if (final_path is not None):
