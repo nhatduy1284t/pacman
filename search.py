@@ -5,6 +5,7 @@ Pacman agents (in searchAgents.py).
 from util import *
 from game import Directions
 import time
+import math
 
 n = Directions.NORTH
 s = Directions.SOUTH
@@ -17,27 +18,30 @@ def depthFirstSearch(problem):
     return a path to the goal
     '''
     # TODO 17
+    start_state = problem.getStartState()
     stack = Stack()
-    node = problem.getStartState()
-    visited = [node]
-    stack.push(node)
-    while(stack):
-        node = stack.pop()
-        neighbors = problem.getSuccessors(node)
-        for tuple in neighbors:
-            i=0
-            n,action, cost = tuple
-            print(n)
-            if(n not in visited):
-                print("Go",action)
-                visited.append(n)
-                stack.push(n)
-                break   
+    stack.push(start_state)
+    visited = set()
+    successors = problem.getSuccessors(start_state)
+    print(successors)
+    while stack:
+        current_state = stack.pop()
+        if problem.isGoalState(current_state):
+            print("Thoat roi")
+            return
+        
+        if current_state not in visited:
+            visited.add(current_state)
+            for successor, action, cost in problem.getSuccessors(current_state):
+                print(successor)             
+                stack.push(successor)
+                break  # explore the first neighbor only
+    
 
 
-    print("da ra khoi while")       
+    # If we get here, the search failed to find a path to the goal
+    return None   
 
-    return None
 
 def breadthFirstSearch(problem):
     '''
@@ -69,7 +73,7 @@ def breadthFirstSearch(problem):
                     return path + [action]
                 # frontier.push((successor, path + [successor]))
                 frontier.enqueue((successor, path + [action]))
-                
+
     return None
 
 
@@ -94,7 +98,20 @@ def singleFoodSearchHeuristic(state, problem=None):
     """
     # TODO 20
     pass
+    heuristic =0
+    xFood = -1
+    yFood = -1
+    xPac, yPac = state.getPacmanPosition()
+    #state co food
+    for i in range(len(list(state.getFood()))):
+        for j in range(len(list(state.getFood()[i]))):
+            if (state.hasFood(i, j)):
+                xFood = i
+                yFood = j
+    heuristic = math.sqrt((xPac-xFood)**2 + (yPac - yFood)**2)
 
+    return heuristic
+        
 
 def multiFoodSearchHeuristic(state, problem=None):
     """
@@ -108,6 +125,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     '''
     return a path to the goal
     '''
+    
     # TODO 22
 
 

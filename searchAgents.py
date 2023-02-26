@@ -21,11 +21,19 @@ class RandomAgent(Agent):
         return actions[0]
 
 class DuyAgent(Agent):
-    def getAction(self, state):
+    def registerInitialState(self, state):
+        pass
         problem = SingleFoodSearchProblem(state)
-        path= breadthFirstSearch(problem)
-        print(path)
-        return path[0]
+        depthFirstSearch(problem)
+       
+        # self.randomAction = x.getAction(state)
+                 
+    def getAction(self, state):
+        actions = state.getLegalPacmanActions()
+        random.shuffle(actions)
+        return Directions.STOP
+
+
 
 class SearchAgent(Agent):
     def registerInitialState(self, state):
@@ -53,14 +61,19 @@ class SearchAgent(Agent):
         # TODO 12
 
 
-
-
 class BFSFoodSearchAgent(SearchAgent):
     # TODO 13
     pass
-
-
-
+    def registerInitialState(self, state):
+        pass
+        problem = SingleFoodSearchProblem(state)
+        self.path=  breadthFirstSearch(problem)
+          
+        
+    def getAction(self, state):
+        action = self.path[0]
+        self.path= self.path[1:]
+        return action    
 
 
 class DFSFoodSearchAgent(SearchAgent):
