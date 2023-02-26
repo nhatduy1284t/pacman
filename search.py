@@ -87,12 +87,21 @@ def breadthFirstSearch(problem):
         successors = problem.getSuccessors(state)
 
         for successor, action, cost in successors:
-            if (successor not in explored) and (successor not in (s for s,_ in frontier.queue)):
-                if problem.isGoalState(successor):
-                    # return path + [successor]
-                    return path + [action]
-                # frontier.push((successor, path + [successor]))
-                frontier.enqueue((successor, path + [action]))
+            successor_pacman_pos = successor.getPacmanPosition()
+            frontier_states = list(s for s,_ in frontier.queue)
+            frontier_pacman_pos = list(s.getPacmanPosition() for s in frontier_states)
+            explored_pacman_pos = list(s.getPacmanPosition() for s in explored)
+            
+            # if (successor.getPacmanPosition() not in (s.getPacmanPosition() for s in explored)):
+            #     if (successor.getPacmanPosition() not in (s.getPacmanPosition() for s in frontier_states)):
+            #         if problem.isGoalState(successor):
+            #             return path + [action]
+            #         frontier.enqueue((successor, path + [action]))
+            
+            if (successor_pacman_pos not in explored_pacman_pos) and (successor_pacman_pos not in frontier_pacman_pos):
+                    if problem.isGoalState(successor):
+                        return path + [action]
+                    frontier.enqueue((successor, path + [action]))
                 
     return None
 
@@ -116,19 +125,25 @@ def uniformCostSearch(problem):
         
         successors = problem.getSuccessors(state)
         for successor, action, cost in successors:
-            if (successor not in explored) and (successor not in (s[0] for _,s in frontier.priority_queue)):
+            successor_pacman_pos = successor.getPacmanPosition()
+            frontier_states = list(s[0] for _,s in frontier.priority_queue)
+            frontier_pacman_pos = list(s.getPacmanPosition() for s in frontier_states)
+            explored_pacman_pos = list(s.getPacmanPosition() for s in explored)
+            
+            if (successor_pacman_pos not in explored_pacman_pos) and (successor_pacman_pos not in frontier_pacman_pos):
                 current_path = path + [action]
                 current_path_cost = problem.getCostOfActions(current_path)
                 pair = (successor, current_path)
                 frontier.push(current_path_cost, pair)
             else:
-                if (successor in (s[0] for _,s in frontier.priority_queue)):
-                    for item in frontier.priority_queue:
-                        if (successor == item[0]):
+                if (successor_pacman_pos in frontier_pacman_pos):
+                    for priority, item in frontier.priority_queue: # value in frontier: (priority,(state, path))
+                        if (successor_pacman_pos == item[0].getPacmanPosition()):
                             current_path = path + [action]
                             current_path_cost = problem.getCostOfActions(current_path)
                             old_path = item[1]
-                            old_path_cost = problem.getCostOfActions(old_path)
+                            old_path_cost = priority
+                            # old_path_cost = problem.getCostOfActions(old_path)
                             if (current_path_cost < old_path_cost):
                                 # Remove the old state
                                 index = frontier.getIndex(item)
