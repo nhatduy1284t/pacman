@@ -67,7 +67,6 @@ def breadthFirstSearch(problem):
     explored = set()
 
     # each item in the frontier is a tuple of (state, path to state)
-    # frontier.push((current_state, [current_state]))
     frontier.enqueue((current_state, []))
     while (frontier):
         state, path = frontier.dequeue()
@@ -80,12 +79,6 @@ def breadthFirstSearch(problem):
             frontier_pacman_pos = list(s.getPacmanPosition()
                                        for s in frontier_states)
             explored_pacman_pos = list(s.getPacmanPosition() for s in explored)
-
-            # if (successor.getPacmanPosition() not in (s.getPacmanPosition() for s in explored)):
-            #     if (successor.getPacmanPosition() not in (s.getPacmanPosition() for s in frontier_states)):
-            #         if problem.isGoalState(successor):
-            #             return path + [action]
-            #         frontier.enqueue((successor, path + [action]))
 
             if (successor_pacman_pos not in explored_pacman_pos) and (successor_pacman_pos not in frontier_pacman_pos):
                 if problem.isGoalState(successor):

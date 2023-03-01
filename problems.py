@@ -60,10 +60,7 @@ class SingleFoodSearchProblem(SearchProblem):
 
     def getSuccessors(self, state):
         # TODO 4
-
         #  Pacman
-        # actions = state.deepCopy().getLegalPacmanActions()
-        actions = state.getLegalPacmanActions()
         actions = state.getLegalPacmanActions()
         successors = []
 
@@ -82,19 +79,32 @@ class MultiFoodSearchProblem(SearchProblem):
     def __init__(self, startingGameState):
         # TODO 6
         pass
+        self.init_state = startingGameState    
 
     def getStartState(self):
         # TODO 7
         pass
+        return self.init_state
 
     def isGoalState(self, state):
         # TODO 8
         pass
+        return state.getNumFood() == 0    
 
     def getSuccessors(self, state):
         # TODO 9
         pass
+        actions = state.getLegalPacmanActions()
+        actions = state.getLegalPacmanActions()
+        successors = []
 
+        for action in actions:
+            successor = state.generatePacmanSuccessor(action)
+            successors.append((successor, action, 1))
+
+        return successors
+    
     def getCostOfActions(self, actions):
         # TODO 10
         pass
+        return len(actions)

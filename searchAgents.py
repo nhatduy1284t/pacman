@@ -66,7 +66,9 @@ class BFSFoodSearchAgent(SearchAgent):
     # TODO 13
     def registerInitialState(self, state):
         super().registerInitialState(state)
-        self.path = breadthFirstSearch(self.problem)         
+        print("ahihi")
+        self.path = breadthFirstSearch(self.problem)
+        print(self.path)
 
 class DFSFoodSearchAgent(SearchAgent):
     # TODO 14
