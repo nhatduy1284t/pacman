@@ -2,7 +2,6 @@ import util
 from game import Directions
 from game import Actions
 
-
 class SearchProblem:
     """
     This class outlines the structure of a search problem, but doesn't implement
@@ -46,35 +45,44 @@ class SearchProblem:
         """
         util.raiseNotDefined()
 
+# References: https://github.com/thiadeliria/Pacman
+UP = Directions.NORTH
+DOWN = Directions.SOUTH
+LEFT = Directions.WEST
+RIGHT = Directions.EAST
+ACTIONS = {UP, DOWN, LEFT, RIGHT}
 
 class SingleFoodSearchProblem(SearchProblem):
     def __init__(self, startingGameState):
         # TODO 1
-        self.startingState = startingGameState
+        self.initGameState = startingGameState
         self.walls = startingGameState.getWalls()
-        self.costFn = lambda x: 1
+        
+        # getFood() return a Grid
+        # asList() of a Grid return a list of tuples in which each tuple contains the x, y location of the food
         self.goal = startingGameState.getFood().asList()[0]
 
     def getStartState(self):
         # TODO 2
-        return self.startingState.getPacmanPosition()
+        return self.initGameState.getPacmanPosition()
 
-    def isGoalState(self, state):
+    def isGoalState(self, state): # state is the current pacman location: (x, y)
         # TODO 3
+        # Check if the pacman current position is the food position
         return state == self.goal
 
     def getSuccessors(self, state):
         # TODO 4
-        
         successors = []
-        for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
-            x, y = state
-            dx, dy = Actions.directionToVector(action)
-            nextx, nexty = int(x + dx), int(y + dy)
-            if not self.walls[nextx][nexty]:
-                nextState = (nextx, nexty)
-                cost = self.costFn(nextState)
-                successors.append((nextState, action, cost))
+        for action in ACTIONS: # ACTIONS definition above
+            xPac, yPac = state # state is the current pacman location: (x, y)
+            dx, dy = Actions.directionToVector(action) # Change the action (ex: move WEST (move LEFT)) -> vector
+            # New pacman position (newX, newY) = old position (oldX, oldY) + the action's Vector (dx, dy)
+            new_x, new_y = int(xPac + dx), int(yPac + dy)
+            if not self.walls[new_x][new_y]: # check if the new position is wall. if not wall, move
+                new_State = (new_x, new_y)
+                cost = 1
+                successors.append((new_State, action, cost))
         return successors
     
 
@@ -85,32 +93,39 @@ class SingleFoodSearchProblem(SearchProblem):
 
 class MultiFoodSearchProblem(SearchProblem):
     def __init__(self, startingGameState):
-        self.startingGameState = startingGameState
+        # TODO 6
+        self.initGameState = startingGameState
         self.startingPosition = startingGameState.getPacmanPosition()
-        self.food = startingGameState.getFood()
-        self.foodList = self.food.asList()
+        self.foodList = startingGameState.getFood().asList()
         self.walls = startingGameState.getWalls()
         
     def getStartState(self):
-        return (self.startingPosition, self.foodList)
+        # TODO 7
+        return (self.startingPosition, self.foodList) # return a tuple including (pacman position, a list of tuples of food position)
     
     def isGoalState(self, state):
+        # TODO 8
+        # check the current number of food. If 0, is goal
         return len(state[1]) == 0
     
     def getSuccessors(self, state):
+        # TODO 9
         successors = []
-        for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
-            x, y = state[0]
+        for action in ACTIONS:
+            xPac, yPac = state[0]
             dx, dy = Actions.directionToVector(action)
-            next_x, next_y = int(x + dx), int(y + dy)
-            if not self.walls[next_x][next_y]:
-                next_food = state[1][:]
-                if (next_x, next_y) in next_food:
-                    next_food.remove((next_x, next_y))
-                next_state = ((next_x, next_y), next_food)
+            new_x, new_y = int(xPac + dx), int(yPac + dy)
+            if not self.walls[new_x][new_y]:
+                new_food = state[1][:] # get the list of food location
+                # Check if the pacman location = 1 of the food locations. If yes, remove food location
+                if (new_x, new_y) in new_food: 
+                    new_food.remove((new_x, new_y))
+                    
+                new_state = ((new_x, new_y), new_food)
                 cost = 1
-                successors.append((next_state, action, cost))
+                successors.append((new_state, action, cost))
         return successors
     
     def getCostOfActions(self, actions):
+        # TODO 10
         return len(actions)

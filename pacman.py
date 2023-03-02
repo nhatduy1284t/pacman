@@ -183,7 +183,7 @@ class GameState:
         currentFood = state.getFood()
         if currentFood[x][y] == True: ...
         """
-
+        print(self.data.food.asList())
         return self.data.food
 
     def getWalls(self):

@@ -23,28 +23,19 @@ def depthFirstSearch(problem):
     frontier = Stack()
     explored = []
 
-    # Each item in the frontier is a tuple of (state, path to state)
     frontier.push((start_state, []))
     while (frontier):
         state, path = frontier.pop()
 
-        # Check if the current state is the goal state
         if problem.isGoalState(state):
             return path
-
-        # Add the current state to the set of explored states
         explored.append(state)
 
-        # Get the successors of the current state
         successors = problem.getSuccessors(state)
-
-        # Iterate over the successors
         for successor, action, cost in reversed(successors):
-            # Check if the successor has not been explored or added to the frontier
             if successor not in explored and successor not in (s for s,_ in frontier.stack):
                 frontier.push((successor, path + [action]))
 
-    # If the goal state is not found, return None
     return None
 
 
@@ -84,53 +75,31 @@ def uniformCostSearch(problem):
     return a path to the goal
     '''
     # TODO 19
-    current_state = problem.getStartState()
+    start_state = problem.getStartState()
+    if problem.isGoalState(start_state):
+        return []
+
     frontier = PriorityQueue()
-    # Push the state, the path and the priority value into the frontier
-    frontier.push(0, (current_state, []))
-    explored = set()
-
+    # frontier is a priorityQueue. In this project, the priorityQueue is hand-written.
+    # the value input into the priorityQueue must follow this form: (priority value, value) 
+    # (the least value will be pop out first)
+    frontier.push(0, (start_state, [], 0))
+    explored = []
+    
     while (frontier):
-        state, path = frontier.pop()
-
-        if (problem.isGoalState(state)):
+        state, path, current_cost = frontier.pop()
+        if problem.isGoalState(state):
             return path
-        explored.add(state)
 
-        successors = problem.getSuccessors(state)
-        for successor, action, cost in successors:
-            successor_pacman_pos = successor.getPacmanPosition()
-            frontier_states = list(s[0] for _, s in frontier.priority_queue)
-            frontier_pacman_pos = list(s.getPacmanPosition()
-                                       for s in frontier_states)
-            explored_pacman_pos = list(s.getPacmanPosition() for s in explored)
+        # If state in explored, move on to another state in frontier
+        if state not in explored:
+            explored.append(state)
+            for successor, actions, cost in problem.getSuccessors(state):
+                newPath = path + [actions]
+                newCost = current_cost + cost
+                frontier.push(newCost, (successor, newPath, newCost))
 
-            if (successor_pacman_pos not in explored_pacman_pos) and (successor_pacman_pos not in frontier_pacman_pos):
-                current_path = path + [action]
-                current_path_cost = problem.getCostOfActions(current_path)
-                pair = (successor, current_path)
-                frontier.push(current_path_cost, pair)
-            else:
-                if (successor_pacman_pos in frontier_pacman_pos):
-                    # value in frontier: (priority,(state, path))
-                    for priority, item in frontier.priority_queue:
-                        if (successor_pacman_pos == item[0].getPacmanPosition()):
-                            current_path = path + [action]
-                            current_path_cost = problem.getCostOfActions(
-                                current_path)
-                            old_path = item[1]
-                            old_path_cost = priority
-                            # old_path_cost = problem.getCostOfActions(old_path)
-                            if (current_path_cost < old_path_cost):
-                                # Remove the old state
-                                index = frontier.getIndex(item)
-                                frontier.removeIndex(index)
-
-                                # Push new state
-                                pair = (successor, current_path)
-                                frontier.push(current_path_cost, pair)
     return None
-
 
 def nullHeuristic(state, problem=None):
     """
