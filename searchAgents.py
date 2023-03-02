@@ -45,7 +45,8 @@ class SearchAgent(Agent):
         state: a GameState object (pacman.py)
         """  
         # TODO 11
-        self.problem = SingleFoodSearchProblem(state)
+        self.problem = MultiFoodSearchProblem(state)
+        # self.problem = SingleFoodSearchProblem(state)
         
         
     def getAction(self, state):

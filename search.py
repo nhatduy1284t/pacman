@@ -17,38 +17,34 @@ def depthFirstSearch(problem):
     return a path to the goal
     '''
     # TODO 17
-    current_state = problem.getStartState()
-
-    if problem.isGoalState(current_state):
+    start_state = problem.getStartState()
+    if problem.isGoalState(start_state):
         return []
-
     frontier = Stack()
-    explored = set()
-    final_path = None
+    explored = []
 
-    # each item in the frontier is a tuple of (state, path to state)
-    frontier.push((current_state, []))
+    # Each item in the frontier is a tuple of (state, path to state)
+    frontier.push((start_state, []))
     while (frontier):
         state, path = frontier.pop()
-        # if state in explored:
-        #     continue
-        if state.getPacmanPosition() in (s.getPacmanPosition() for s in explored):
-            # explored.add(state)
-            continue
-        explored.add(state)
 
-        if (problem.isGoalState(state)):
-            # return path
-            final_path = path
-            break
+        # Check if the current state is the goal state
+        if problem.isGoalState(state):
+            return path
 
+        # Add the current state to the set of explored states
+        explored.append(state)
+
+        # Get the successors of the current state
         successors = problem.getSuccessors(state)
+
+        # Iterate over the successors
         for successor, action, cost in reversed(successors):
-            if (successor.getPacmanPosition() not in (s.getPacmanPosition() for s in explored)):
+            # Check if the successor has not been explored or added to the frontier
+            if successor not in explored and successor not in (s for s,_ in frontier.stack):
                 frontier.push((successor, path + [action]))
 
-    if (final_path is not None):
-        return final_path
+    # If the goal state is not found, return None
     return None
 
 
@@ -57,33 +53,28 @@ def breadthFirstSearch(problem):
     return a path to the goal
     '''
     # TODO 18
-    current_state = problem.getStartState()
+    start_state = problem.getStartState()
 
-    if problem.isGoalState(current_state):
-        # return [current_state]
+    if problem.isGoalState(start_state):
         return []
 
     frontier = Queue()
-    explored = set()
+    explored = []
 
     # each item in the frontier is a tuple of (state, path to state)
-    frontier.enqueue((current_state, []))
+    frontier.enqueue((start_state, []))
+
     while (frontier):
         state, path = frontier.dequeue()
-        explored.add(state)
-        successors = problem.getSuccessors(state)
+        if problem.isGoalState(state):
+            return path
 
-        for successor, action, cost in successors:
-            successor_pacman_pos = successor.getPacmanPosition()
-            frontier_states = list(s for s, _ in frontier.queue)
-            frontier_pacman_pos = list(s.getPacmanPosition()
-                                       for s in frontier_states)
-            explored_pacman_pos = list(s.getPacmanPosition() for s in explored)
-
-            if (successor_pacman_pos not in explored_pacman_pos) and (successor_pacman_pos not in frontier_pacman_pos):
-                if problem.isGoalState(successor):
-                    return path + [action]
-                frontier.enqueue((successor, path + [action]))
+        if state not in explored:
+            explored.append(state)
+            
+            for successor, action, cost in problem.getSuccessors(state):
+                if successor not in explored:
+                    frontier.enqueue((successor, path + [action]))
 
     return None
 

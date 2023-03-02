@@ -1,4 +1,6 @@
 import util
+from game import Directions
+from game import Actions
 
 
 class SearchProblem:
@@ -48,27 +50,33 @@ class SearchProblem:
 class SingleFoodSearchProblem(SearchProblem):
     def __init__(self, startingGameState):
         # TODO 1
-        self.init_state = startingGameState
+        self.startingState = startingGameState
+        self.walls = startingGameState.getWalls()
+        self.costFn = lambda x: 1
+        self.goal = startingGameState.getFood().asList()[0]
 
     def getStartState(self):
         # TODO 2
-        return self.init_state
+        return self.startingState.getPacmanPosition()
 
     def isGoalState(self, state):
         # TODO 3
-        return state.getNumFood() == 0
+        return state == self.goal
 
     def getSuccessors(self, state):
         # TODO 4
-        #  Pacman
-        actions = state.getLegalPacmanActions()
+        
         successors = []
-
-        for action in actions:
-            successor = state.generatePacmanSuccessor(action)
-            successors.append((successor, action, 1))
-
+        for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
+            x, y = state
+            dx, dy = Actions.directionToVector(action)
+            nextx, nexty = int(x + dx), int(y + dy)
+            if not self.walls[nextx][nexty]:
+                nextState = (nextx, nexty)
+                cost = self.costFn(nextState)
+                successors.append((nextState, action, cost))
         return successors
+    
 
     def getCostOfActions(self, actions):
         # TODO 5
@@ -77,34 +85,32 @@ class SingleFoodSearchProblem(SearchProblem):
 
 class MultiFoodSearchProblem(SearchProblem):
     def __init__(self, startingGameState):
-        # TODO 6
-        pass
-        self.init_state = startingGameState    
-
+        self.startingGameState = startingGameState
+        self.startingPosition = startingGameState.getPacmanPosition()
+        self.food = startingGameState.getFood()
+        self.foodList = self.food.asList()
+        self.walls = startingGameState.getWalls()
+        
     def getStartState(self):
-        # TODO 7
-        pass
-        return self.init_state
-
+        return (self.startingPosition, self.foodList)
+    
     def isGoalState(self, state):
-        # TODO 8
-        pass
-        return state.getNumFood() == 0    
-
+        return len(state[1]) == 0
+    
     def getSuccessors(self, state):
-        # TODO 9
-        pass
-        actions = state.getLegalPacmanActions()
-        actions = state.getLegalPacmanActions()
         successors = []
-
-        for action in actions:
-            successor = state.generatePacmanSuccessor(action)
-            successors.append((successor, action, 1))
-
+        for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:
+            x, y = state[0]
+            dx, dy = Actions.directionToVector(action)
+            next_x, next_y = int(x + dx), int(y + dy)
+            if not self.walls[next_x][next_y]:
+                next_food = state[1][:]
+                if (next_x, next_y) in next_food:
+                    next_food.remove((next_x, next_y))
+                next_state = ((next_x, next_y), next_food)
+                cost = 1
+                successors.append((next_state, action, cost))
         return successors
     
     def getCostOfActions(self, actions):
-        # TODO 10
-        pass
         return len(actions)
