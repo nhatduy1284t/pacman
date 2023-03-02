@@ -183,7 +183,7 @@ class GameState:
         currentFood = state.getFood()
         if currentFood[x][y] == True: ...
         """
-        print(self.data.food.asList())
+        # print(self.data.food.asList())
         return self.data.food
 
     def getWalls(self):
@@ -511,10 +511,10 @@ def readCommand(argv):
                       help=default('the number of GAMES to play'), metavar='GAMES', default=1)
     parser.add_option('-l', '--layout', dest='layout',
                       help=default('the LAYOUT_FILE from which to load the map layout'),
-                      metavar='LAYOUT_FILE', default='mediumClassic.lay')
+                      metavar='LAYOUT_FILE', default='mediumClassic2.lay')
     parser.add_option('-p', '--pacman', dest='pacman',
                       help=default('the agent TYPE in the pacmanAgents module to use'),
-                      metavar='TYPE', default='BFSFoodSearchAgent')
+                      metavar='TYPE', default='AStarFoodSearchAgent')
     parser.add_option('-t', '--textGraphics', action='store_true', dest='textGraphics',
                       help='Display output as text only', default=False)
     parser.add_option('-q', '--quietTextGraphics', action='store_true', dest='quietGraphics',

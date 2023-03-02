@@ -116,17 +116,9 @@ def singleFoodSearchHeuristic(state, problem=None):
     # TODO 20
     pass
     heuristic = 0
-    xFood = -1
-    yFood = -1
-    xPac, yPac = state.getPacmanPosition()
-    # state co food
-    for i in range(len(list(state.getFood()))):
-        for j in range(len(list(state.getFood()[i]))):
-            if (state.hasFood(i, j)):
-                xFood = i
-                yFood = j
+    xFood, yFood = problem.goal
+    xPac, yPac = state
     heuristic = math.sqrt((xPac-xFood)**2 + (yPac - yFood)**2)
-
     return heuristic
 
 
@@ -136,34 +128,45 @@ def multiFoodSearchHeuristic(state, problem=None):
     """
     # TODO 21
     pass
-
+    heuristics = []
+    xPac, yPac = state[0]
+    foodPositions = state[1]
+    for foodPos in foodPositions:
+        heuristic = math.sqrt((xPac-foodPos[0])**2 + (yPac - foodPos[1])**2)
+        heuristics.append(heuristic)
+    
+    return min(heuristics)    
 
 def aStarSearch(problem, heuristic=nullHeuristic):
     '''
     return a path to the goal
     '''
     # TODO 22
-    startState = problem.getStartState()
-    if problem.isGoalState(startState):
+    start_state = problem.getStartState()
+    if problem.isGoalState(start_state):
         return []
 
-    pq = PriorityQueue()
-    pq.push(0, (startState, []))
+    frontier = PriorityQueue()
+    # frontier is a priorityQueue. In this project, the priorityQueue is hand-written.
+    # the value input into the priorityQueue must follow this form: (priority value, value) 
+    # (the least value will be pop out first)
+    frontier.push(0, (start_state, [], 0))
+    explored = []
     
-    visited = set()
-    
-    while pq:
-        state, path = pq.pop()
-        if problem.isGoalState(state):         
-            return path            
-        if state.getPacmanPosition() not in visited:
-            visited.add(state.getPacmanPosition())
-            for successor, action, cost in problem.getSuccessors(state):
-                totalCost = problem.getCostOfActions(
-                    path + [action]) + heuristic(successor, problem)
-                pq.push(totalCost,(successor, path+ [action]))
+    while (frontier):
+        state, path, current_cost = frontier.pop()
+        if problem.isGoalState(state):
+            return path
 
-    return []
+        # If state in explored, move on to another state in frontier
+        if state not in explored:
+            explored.append(state)
+            for successor, actions, cost in problem.getSuccessors(state):
+                newPath = path + [actions]
+                newCost = current_cost + cost + heuristic(state, problem)
+                frontier.push(newCost, (successor, newPath, newCost))
+    
+    return None
 
 
 # Abbreviations

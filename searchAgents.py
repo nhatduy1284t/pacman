@@ -21,19 +21,6 @@ class RandomAgent(Agent):
         random.shuffle(actions)
         return actions[0]
 
-class DuyAgent(Agent):
-    def registerInitialState(self, state):
-        pass
-        problem = SingleFoodSearchProblem(state)
-        self.path= aStarSearch(problem,singleFoodSearchHeuristic)
-
-                 
-    def getAction(self, state):
-        action = self.path[0]
-        self.path= self.path[1:]
-        return action
-
-
 class SearchAgent(Agent):
     def registerInitialState(self, state):
         """
@@ -43,12 +30,15 @@ class SearchAgent(Agent):
         All of the work is done in this method!
 
         state: a GameState object (pacman.py)
-        """  
+        """
         # TODO 11
-        self.problem = MultiFoodSearchProblem(state)
-        # self.problem = SingleFoodSearchProblem(state)
-        
-        
+        if(state.getNumFood() == 1):
+            self.problem = SingleFoodSearchProblem(state)
+        else:
+            self.problem = MultiFoodSearchProblem(state)
+
+        self.step = 0
+
     def getAction(self, state):
         """
         Returns the next action in the path chosen earlier (in
@@ -59,7 +49,11 @@ class SearchAgent(Agent):
         """
         # TODO 12
         action = self.path[0]
-        self.path= self.path[1:]
+        self.path = self.path[1:]
+        self.step += 1
+
+        if (len(self.path) == 0):  # end game
+            print("Total steps:", self.step)
         return action
 
 
@@ -68,24 +62,29 @@ class BFSFoodSearchAgent(SearchAgent):
     def registerInitialState(self, state):
         super().registerInitialState(state)
         self.path = breadthFirstSearch(self.problem)
-        print(self.path)
+
 
 class DFSFoodSearchAgent(SearchAgent):
     # TODO 14
     def registerInitialState(self, state):
         super().registerInitialState(state)
-        self.path = depthFirstSearch(self.problem)         
+        self.path = depthFirstSearch(self.problem)
 
 
 class UCSFoodSearchAgent(SearchAgent):
-    # TODO 15    
+    # TODO 15
     def registerInitialState(self, state):
         super().registerInitialState(state)
-        self.path = uniformCostSearch(self.problem)  
+        self.path = uniformCostSearch(self.problem)
+
 
 class AStarFoodSearchAgent(SearchAgent):
     # TODO 16
     def registerInitialState(self, state):
         super().registerInitialState(state)
-        self.path = aStarSearch(self.problem)
+        problemName = self.problem.__class__.__name__
 
+        if (problemName == "MultiFoodSearchProblem"):
+            self.path = aStarSearch(self.problem, multiFoodSearchHeuristic)
+        else:
+            self.path = aStarSearch(self.problem, singleFoodSearchHeuristic)
