@@ -4,9 +4,7 @@ Pacman agents (in searchAgents.py).
 """
 from util import *
 from game import Directions
-import time
 import math
-import heapq
 n = Directions.NORTH
 s = Directions.SOUTH
 e = Directions.EAST
